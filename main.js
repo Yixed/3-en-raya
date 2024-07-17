@@ -1,35 +1,30 @@
-/* Hacer un tres en raya:
-
-1- Rellenar por JS la tabla del tablero con filas y columnas en una variable
-2- Evento onClick para pintar la casilla clicada, bloquear despues
-3- Al colocar ficha se cambia el jugador y mostrarlo en pantalla
-4- Comprobar cuando se llena el tablero y mostrar un mensaje de tablas
-5- Replay reinicia el juego
-6- Extra: Comprueba si ha ganado alguien y mostrar alert */
-
 //Hacer la tabla al cargar la pagina
-const NUMBER_OF_ROWS = 5,
-  NUMBER_OF_COLUMNS = 5
-let winCount = 4 //Se define condiccion de victoria
 const player1Id = 'X',
   player2Id = 'O' //Declaramos jugadores
 var actualPlayer = 'X' //Declaramos jugador actual
 var actualPlayerColor = 'red' //Color del jugador actual
 let victory = false //Variable de control de fin de juego
 
-function init() {
-  tableCreation() //Se crea la tabla
+const rows = 10,
+  columns = 10
+let winCount = 5
+
+init()
+
+function init () {
   playerMove() //Cada click en celda se modifica la celda y se cambia de player
-  ReplayButton() //Funcionalidad de reinicio
+  replayButton() //Funcionalidad de reinicio
+  configButton()
 }
 
-function tableCreation() {
+function tableCreation (rows, columns, victory) {
   const table$ = document.querySelector('#board')
+  table$.innerHTML=""
 
-  for (let i = 0; i < NUMBER_OF_ROWS; i++) {
+  for (let i = 0; i < rows; i++) {
     // NUMBER_OF_ROWS
     const row = document.createElement('tr')
-    for (let j = 0; j < NUMBER_OF_COLUMNS; j++) {
+    for (let j = 0; j < columns; j++) {
       //NUMBER_OF_COLUMNS
       const column = document.createElement('td')
       column.textContent = ''
@@ -38,15 +33,15 @@ function tableCreation() {
     table$.appendChild(row)
   }
   const NUMBER_OF_ROWS$ = document.querySelector('#NUMBER_OF_ROWS')
-  NUMBER_OF_ROWS$.textContent = NUMBER_OF_ROWS + ' :nº de filas (y)'
+  NUMBER_OF_ROWS$.textContent = rows + ' :nº de filas (y)'
   const NUMBER_OF_COLUMNS$ = document.querySelector('#NUMBER_OF_COLUMNS')
-  NUMBER_OF_COLUMNS$.textContent = NUMBER_OF_COLUMNS + ' :nº de columnas (x)'
+  NUMBER_OF_COLUMNS$.textContent = columns + ' :nº de columnas (x)'
   const winCount$ = document.querySelector('#winCount')
-  winCount$.textContent = winCount + ': Victoria'
+  winCount$.textContent = victory + ': Victoria'
 }
 
 //Evento onClick para jugar----------------------------
-function playerMove() {
+function playerMove () {
   let cells$ = document.querySelectorAll('td') //Seleccionamos las celdas de juego en cells
 
   const movement = event => {
@@ -54,13 +49,15 @@ function playerMove() {
       //Cuando se clicka se rellena segun el player
       event.target.textContent = actualPlayer //Se actualiza el valor de la celda
       event.target.style.color = actualPlayerColor
-      actualPlayer = changePlayer(actualPlayer, player1Id, player2Id)
+      //actualPlayer = changePlayer(actualPlayer, player1Id, player2Id)
+      actualPlayer = actualPlayer === player1Id ? player2Id : player1Id
+      const actualPlayer$ = document.querySelector('#currentPlayer')
+      actualPlayer$.textContent = 'Juega: ' + actualPlayer
       actualPlayerColor = actualPlayer === player1Id ? 'red' : '#2eff2e' //SE podria hacer lo mismo con el player
     }
     winnerAlert() //Comprueba si alguien ha ganado
-    //checkWinPro()//Solucion Hector Zaragoza
     if (!victory) {
-      GameOver() //Comprueba si el tablero está lleno
+      gameOver() //Comprueba si el tablero está lleno (tablas)
     }
   }
 
@@ -70,29 +67,17 @@ function playerMove() {
   }
 }
 
-function changePlayer(actualPlayer_, player1Id_, player2Id_) {
-  //Se define quien es el jugador actual
-  if (actualPlayer_ === player1Id_) {
-    actualPlayer_ = player2Id_
-  } else {
-    actualPlayer_ = player1Id_
-  }
-  const actualPlayer$ = document.querySelector('#currentPlayer')
-  actualPlayer$.textContent = 'Juega: ' + actualPlayer_
-  return actualPlayer_
-}
-
-//Al llenarse el tablero mostrar tablas----------------
-function GameOver() {
+//Comprobación de tablas -------------------------------
+function gameOver () {
   let cells$ = document.querySelectorAll('td') //Seleccionamos las celdas de juego en cells
   let cellsCount = 0 //Conteo de celdas vacias
 
   for (const cell$ of cells$) {
     if (cell$.textContent === '') {
-      //alert('No hay texto, conteo: ' + cellsCount)
       cellsCount++
     }
   }
+
   if (cellsCount === 0 && !victory) {
     alert('GAME OVER')
     victory = true
@@ -100,7 +85,7 @@ function GameOver() {
 }
 
 //Boton reinicio---------------------------------------
-function ReplayButton() {
+function replayButton () {
   let replayButton$ = document.querySelector('#replay')
 
   const clearing = event => {
@@ -110,12 +95,38 @@ function ReplayButton() {
     }
     victory = false
   }
-
   replayButton$.addEventListener('click', clearing)
 }
 
+//Boton config ---------------------------------------
+function configButton () {
+  let configButton$ = document.querySelector('#config')
+
+  const loadNewTable = event => {
+    console.log('clicked')
+    const rowInput$ = document.querySelector('#rowInput')
+    const columnInput$ = document.querySelector('#columnInput')
+    const victoryInput$ = document.querySelector('#victoryInput')
+
+    let cells$ = document.querySelectorAll('td')
+    for (const cell$ of cells$) {
+      cell$.textContent = ''
+    }
+    victory = false
+
+    tableCreation(
+      rowInput$.value ? rowInput$.value : 4,
+      columnInput$.value ? columnInput$.value : 4,
+      victoryInput$.value ? victoryInput$.value : 4
+    )
+    playerMove() //Se vuelven a cargar los eventlistener de la nueva tabla
+  }
+
+  configButton$.addEventListener('click', loadNewTable)
+}
+
 //Winner alert-----------------------------------------
-function winnerAlert() {
+function winnerAlert () {
   //RELLENAMOS UNA MATRIZ CON LOS DATOS
   let rows$ = document.querySelectorAll('tr') //Array de tr's
   //console.log(rows$) //array de tr's
@@ -142,14 +153,11 @@ function winnerAlert() {
     count2 = 1
   let horMaxCount1 = 0,
     horMaxCount2 = 0
-  let
-    verMaxCount1 = 0,
+  let verMaxCount1 = 0,
     verMaxCount2 = 0
-  let
-    dia1MaxCount1 = 0,
+  let dia1MaxCount1 = 0,
     dia1MaxCount2 = 0
-  let
-    dia2MaxCount1 = 0,
+  let dia2MaxCount1 = 0,
     dia2MaxCount2 = 0
 
   //Victoria horizontal
@@ -167,9 +175,6 @@ function winnerAlert() {
         count1++
         if (count1 > horMaxCount1) {
           horMaxCount1 = count1
-          //if (horMaxCount1 >= winCount) {
-          //  winPosition = [(i, j),(i-1,j),(i-2,j)]
-          //}
         }
       } else {
         count1 = 1 //Si no están seguidas dejamos de contar
@@ -342,13 +347,8 @@ function winnerAlert() {
   console.log(tableMatrix)
 }
 
-function winnerResult(i_, j_, direction) {
-  //Resaltar las casillas ganadoras
-  //i : fila desde arriba, (NUMBER_OF_ROWS - 1) --- tr
-  //j : columna desde la izquierda (NUMBER_OF_COLUMNS - 1) --- td en tr
-}
-
-function getMatrix() {
+//COMPROBAR DESDE LA CASILLA CLICADA PARA RESALTARLA ---------------------------------------
+function getMatrix () {
   //RELLENAMOS UNA MATRIZ CON LOS DATOS DEL TABLERO
   let rows$ = document.querySelectorAll('tr') //Array de tr's
   //console.log(rows$) //array de tr's
@@ -371,90 +371,21 @@ function getMatrix() {
   return tableMatrix
 }
 
-function winCheck(i_, j_) {
+function winCheck (i_, j_) {
   //Comprobar la victoria cada vez que se pone ficha , hacia atras y hacia alante
   let boardMatrix = getMatrix()
-  
-      //Comprobación horizontal 
 
-      //Comprobacion vertical
+  //Comprobación horizontal
 
-      //Diagonal 1 
+  //Comprobacion vertical
 
-      //Diagonal 2
-    
+  //Diagonal 1 /
+
+  //Diagonal 2 \
 }
 
-//Solución Hector Zaragoza:
-function getBoardArray() {
-  let board$ = document.querySelector('#board');
-  let trs$ = board$.querySelectorAll('tr');
-  let boardArray = [];
-  for (let tr$ of trs$) {
-    let tds$ = tr$.querySelectorAll('td');
-    let row = [];
-    for (let td$ of tds$) {
-      row.push(td$.textContent);
-    }
-
-    boardArray.push(row);
-  }
-
-  return boardArray;
+function winnerResult (i_, j_) {
+  //Resaltar las casillas ganadoras
+  //i : fila desde arriba, (NUMBER_OF_ROWS - 1) --- tr
+  //j : columna desde la izquierda (NUMBER_OF_COLUMNS - 1) --- td en tr
 }
-function checkWinPro() {
-  let boardArray = getBoardArray();
-  for (let r = 0; r < boardArray.length; r++) {
-    for (let c = 0; c < boardArray[r].length; c++) {
-      if (boardArray[r][c] !== EMPTY_TOKEN) {
-        //Horizontal
-        if (c - 2 >= 0 && boardArray[r][c - 2] === boardArray[r][c - 1] && boardArray[r - 2] === boardArray[r][c]) {
-          return true;
-        }
-        if (c - 1 >= 0 && c + 1 < boardArray[r].length && boardArray[r][c - 1] === boardArray[r][c] && boardArray[r][c] === boardArray[r][c + 1]) {
-          return true;
-        }
-        if (c + 2 < boardArray[r].length && boardArray[r][c] === boardArray[r][c + 1] && boardArray[r][c] === boardArray[r][c + 2]) {
-          return true;
-        }
-
-        //Vertical
-        if (r - 2 >= 0 && boardArray[r - 2][c] === boardArray[r - 1][c] && boardArray[r - 1][c] === boardArray[r][c]) {
-          return true;
-        }
-        if (r - 1 >= 0 && r + 1 < boardArray.length && boardArray[r - 1][c] === boardArray[r][c] && boardArray[r][c] === boardArray[r + 1][c]) {
-          return true;
-        }
-        if (r + 2 < boardArray.length && boardArray[r][c] === boardArray[r + 1][c] && boardArray[r][c] === boardArray[r + 2][c]) {
-          return true;
-        }
-
-        //Diagonal left up to right down
-        if (r - 2 >= 0 && c - 2 >= 0 && boardArray[r - 2][c - 2] === boardArray[r - 1][c - 1] && boardArray[r - 1][c - 1] === boardArray[r][c]) {
-          return true;
-        }
-        if (r - 1 >= 0 && r + 1 < boardArray.length && c - 1 >= 0 && c + 1 < boardArray[r].length && boardArray[r - 1][c - 1] === boardArray[r][c] && boardArray[r][c] === boardArray[r + 1][c + 1]) {
-          return true;
-        }
-        if (r + 2 < boardArray.length && c + 2 < boardArray[r].length && boardArray[r][c] === boardArray[r + 1][c + 1] && boardArray[r][c] === boardArray[r + 2][c + 2]) {
-          return true;
-        }
-
-        //Diagonal left down to right up
-        if (r - 2 >= 0 && c + 2 < boardArray[r].length && boardArray[r - 2][c + 2] === boardArray[r - 1][c + 1] && boardArray[r - 1][c + 1] === boardArray[r][c]) {
-          return true;
-        }
-        if (r - 1 >= 0 && r + 1 < boardArray.length && c - 1 >= 0 && c + 1 < boardArray[r].length && boardArray[r - 1][c + 1] === boardArray[r][c] && boardArray[r][c] === boardArray[r + 1][c - 1]) {
-          return true;
-        }
-        if (r + 2 < boardArray.length && c - 2 >= 0 && boardArray[r][c] === boardArray[r + 1][c - 1] && boardArray[r][c] === boardArray[r + 2][c - 2]) {
-          return true;
-        }
-      }
-    }
-  }
-
-  return false;
-}
-
-init()

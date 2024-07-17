@@ -11,28 +11,154 @@
     <div id="container">
       <h1 id="currentPlayer">Juega: X</h1>
       <div id="gameData">
-        <p id="NUMBER_OF_ROWS">texto1</p>
-        <p id="NUMBER_OF_COLUMNS">texto2</p>
-        <p id="winCount">texto3</p>
+        <p id="NUMBER_OF_ROWS">*tablero tipo</p>
+        <p id="NUMBER_OF_COLUMNS">--Cellblock--</p>
+        <p id="winCount">de Neopets</p>
       </div>
     </div>
 
-    <table id="board"></table>
+    <table id="board">
+      
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="color: red">X</td>
+        <td style="color: rgb(46, 255, 46)">O</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="color: rgb(46, 255, 46)">O</td>
+        <td style="color: red">X</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      
+    </table>
+    
+    
     <button id="replay">Empezar de nuevo</button>
 
     <div class="dataContainer">
       <div class="dataInputContainer">
-        <input type="text" id="name" placeholder="Filas" />
+        <input type="text" id="rowInput" placeholder="Filas:4" />
         <p class="inputText">: nº de filas (y)</p>
       </div>
       <div class="dataInputContainer">
-        <input type="text" id="name" placeholder="Columnas" />
+        <input type="text" id="columnInput" placeholder="Columnas:4" />
         <p class="inputText">: nº de columnas (x)</p>
       </div>
       <div class="dataInputContainer">
-        <input type="text" id="name" placeholder="Victoria" />
+        <input type="text" id="victoryInput" placeholder="Victoria:4" />
         <p class="inputText">: Victoria</p>
       </div>
+      <button id="config">Cargar datos y reiniciar</button>
     </div>
   </body>
 </html>
