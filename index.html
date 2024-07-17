@@ -8,11 +8,31 @@
     <script src="main.js" defer></script>
   </head>
   <body>
-    <h1 id="currentPlayer">Juega: X</h1>
+    <div id="container">
+      <h1 id="currentPlayer">Juega: X</h1>
+      <div id="gameData">
+        <p id="NUMBER_OF_ROWS">texto1</p>
+        <p id="NUMBER_OF_COLUMNS">texto2</p>
+        <p id="winCount">texto3</p>
+      </div>
+    </div>
+
     <table id="board"></table>
     <button id="replay">Empezar de nuevo</button>
-    <!--<input type="text" id="name" placeholder="Filas" />
-    <input type="text" id="name" placeholder="Columnas" />
-    <input type="text" id="name" placeholder="Victoria" />-->
+
+    <div class="dataContainer">
+      <div class="dataInputContainer">
+        <input type="text" id="name" placeholder="Filas" />
+        <p class="inputText">: nº de filas (y)</p>
+      </div>
+      <div class="dataInputContainer">
+        <input type="text" id="name" placeholder="Columnas" />
+        <p class="inputText">: nº de columnas (x)</p>
+      </div>
+      <div class="dataInputContainer">
+        <input type="text" id="name" placeholder="Victoria" />
+        <p class="inputText">: Victoria</p>
+      </div>
+    </div>
   </body>
 </html>

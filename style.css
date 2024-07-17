@@ -1,6 +1,37 @@
+*{
+    font-family: Arial, Helvetica, sans-serif;
+}
+p{
+    margin: 8px;
+}
+
+#container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 15%;
+}
 #currentPlayer {
-    text-align: center;
-    transform: translateX(-4%);
+    margin-right: 30px;
+}
+#gameData{
+    margin: 5px;
+    border: solid 2px;
+    border-radius: 5px;
+}
+
+.dataContainer {
+    font-size: 11px;
+    margin: 15px;
+    display: none;
+}
+.dataInputContainer{
+    margin-left: 50%;
+    transform: translateX(-32%);
+    width: 400px;
+}
+.inputText{
+    display: inline-block;
 }
 
 #board {
@@ -19,7 +50,9 @@
     width: 35px;
     text-align: center;
     background-color: rgb(245, 247, 218);
-    
+    font-weight: 550;
+    font-size: 24px;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 
 #replay {
