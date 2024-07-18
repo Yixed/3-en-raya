@@ -38,6 +38,8 @@ function tableCreation (rows, columns, victory) {
   NUMBER_OF_COLUMNS$.textContent = columns + ' :nº de columnas (x)'
   const winCount$ = document.querySelector('#winCount')
   winCount$.textContent = victory + ': Victoria'
+
+  winCount=victory
 }
 
 //Evento onClick para jugar----------------------------
@@ -119,6 +121,7 @@ function configButton () {
       columnInput$.value ? columnInput$.value : 4,
       victoryInput$.value ? victoryInput$.value : 4
     )
+    
     playerMove() //Se vuelven a cargar los eventlistener de la nueva tabla
   }
 
